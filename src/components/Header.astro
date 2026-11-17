@@ -1,0 +1,146 @@
+---
+import Monogram from './Monogram.astro';
+import { nav } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header" data-header>
+  <div class="container bar">
+    <a href="/" class="brand" aria-label="Arsalan Studio — home">
+      <Monogram size={34} />
+      <span class="brand-text">
+        <span class="brand-name">ARSALAN STUDIO</span>
+        <span class="brand-by">BY ARSALAN RIZWAN</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-btn>
+      <span class="sr-only">Menu</span>
+      <span class="menu-lines" aria-hidden="true"><span></span><span></span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile">
+      <ol>
+        {nav.map((item, i) => (
+          <li style={`--i:${i}`}>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              <span class="index-num">0{i + 1}</span>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+    <p class="label mobile-tag">Engineering ideas. Creating experiences.</p>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    height: var(--header-h);
+    transition: background-color 0.5s var(--ease), border-color 0.5s var(--ease), transform 0.5s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+  .site-header.is-scrolled {
+    background: rgba(16, 17, 20, 0.86);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-color: var(--line);
+  }
+  .site-header.is-hidden { transform: translateY(-100%); }
+  .bar { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+  .brand { display: inline-flex; align-items: center; gap: 0.85rem; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .brand-name { font-weight: 700; letter-spacing: 0.22em; font-size: 0.8rem; }
+  .brand-by { font-size: 0.62rem; letter-spacing: 0.24em; color: var(--subtle); font-weight: 600; }
+
+  .desktop-nav ul { display: flex; gap: clamp(1rem, 2.2vw, 2.4rem); list-style: none; }
+  .desktop-nav a {
+    position: relative; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    color: var(--muted); padding-block: 0.6rem; transition: color 0.3s var(--ease);
+  }
+  .desktop-nav a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0.25rem; height: 1px;
+    background: var(--ivory); transform: scaleX(0); transform-origin: right; transition: transform 0.5s var(--ease);
+  }
+  .desktop-nav a:hover, .desktop-nav a[aria-current='page'] { color: var(--ivory); }
+  .desktop-nav a:hover::after, .desktop-nav a[aria-current='page']::after { transform: scaleX(1); transform-origin: left; }
+
+  .menu-btn {
+    display: none; background: none; border: 1px solid var(--line-strong); color: var(--ivory);
+    width: 48px; height: 48px; border-radius: 50%; cursor: pointer; place-items: center;
+  }
+  .menu-lines { display: grid; gap: 6px; width: 18px; }
+  .menu-lines span { height: 1.5px; background: currentColor; transition: transform 0.45s var(--ease); }
+  .menu-btn[aria-expanded='true'] .menu-lines span:first-child { transform: translateY(3.75px) rotate(45deg); }
+  .menu-btn[aria-expanded='true'] .menu-lines span:last-child { transform: translateY(-3.75px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed; inset: var(--header-h) 0 0 0; background: var(--obsidian);
+    padding: 2rem var(--gutter); display: flex; flex-direction: column; justify-content: space-between;
+    border-top: 1px solid var(--line); overflow-y: auto;
+  }
+  .mobile-menu[hidden] { display: none; }
+  .mobile-menu ol { list-style: none; padding: 0; margin: 0; }
+  .mobile-menu li { border-bottom: 1px solid var(--line); }
+  .mobile-menu a {
+    display: flex; align-items: baseline; gap: 1rem; padding: 1rem 0;
+    font-size: clamp(2rem, 9vw, 3rem); letter-spacing: -0.03em; font-weight: 500;
+  }
+  .mobile-menu a[aria-current='page'] { color: var(--slate); }
+  .mobile-tag { margin-top: 2rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-menu:not([hidden]) li { animation: rise 0.8s var(--ease) both; animation-delay: calc(var(--i) * 60ms); }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  }
+
+  @media (max-width: 960px) {
+    .desktop-nav { display: none; }
+    .menu-btn { display: grid; }
+  }
+  @media (max-width: 380px) { .brand-by { display: none; } }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]')!;
+  const menu = document.querySelector<HTMLElement>('[data-menu]')!;
+
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 24);
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    header.classList.toggle('is-hidden', !open && y > 400 && y > lastY);
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setOpen = (open: boolean) => {
+    btn.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+    header.classList.toggle('is-scrolled', open || window.scrollY > 24);
+    if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+  };
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); }
+  });
+  window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+</script>

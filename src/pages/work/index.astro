@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { sortedProjects } from '../../data/projects';
+import { categories } from '../../data/types';
+
+const counts = Object.fromEntries(
+  categories.map((c) => [c.id, sortedProjects.filter((p) => p.category === c.id || p.alsoIn?.includes(c.id)).length]),
+);
+---
+<Base title="Work" description="Selected and complete work by Arsalan Rizwan: AR, VR and MR experiences, games, software and mobile apps, AI experiments and research projects.">
+  <div class="container page">
+    <SectionHead as="h1" label="Work" title="Everything," titleAccent="in one place." intro={`${sortedProjects.length} projects drawn from published apps, client work, university research and personal experiments. Filter by discipline below.`} />
+
+    <div class="filters" role="group" aria-label="Filter projects by category" data-filters>
+      <button type="button" aria-pressed="true" data-filter="all">All <span>{sortedProjects.length}</span></button>
+      {categories.map((c) => (
+        <button type="button" aria-pressed="false" data-filter={c.id}>{c.label} <span>{counts[c.id]}</span></button>
+      ))}
+    </div>
+    <p class="sr-only" aria-live="polite" data-filter-status></p>
+
+    <h2 class="sr-only">All projects</h2>
+    <div class="grid" data-grid>
+      {sortedProjects.map((p, i) => <ProjectCard project={p} index={i} eager={i < 2} />)}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); position: sticky; top: calc(var(--header-h) - 1px); z-index: 5; padding: 1rem 0; background: var(--obsidian); border-bottom: 1px solid var(--line); }
+  .filters button {
+    font: inherit; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    color: var(--muted); background: transparent; border: 1px solid var(--line-strong); border-radius: 999px;
+    padding: 0.6rem 1rem; min-height: 44px; cursor: pointer; transition: all 0.35s var(--ease);
+  }
+  .filters button span { color: var(--subtle); margin-left: 0.3rem; font-variant-numeric: tabular-nums; }
+  .filters button:hover { color: var(--ivory); border-color: var(--ivory); }
+  .filters button[aria-pressed='true'] { background: var(--ivory); color: var(--obsidian); border-color: var(--ivory); }
+  .filters button[aria-pressed='true'] span { color: var(--graphite); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(2.5rem, 5vw, 4.5rem) clamp(1rem, 2.5vw, 2.5rem); }
+  .grid :global(article[hidden]) { display: none; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .filters { position: static; } }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-grid] > article');
+  const status = document.querySelector<HTMLElement>('[data-filter-status]');
+  const apply = (f: string, push = true) => {
+    let n = 0;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
+    cards.forEach((c) => {
+      const show = f === 'all' || (c.dataset.category ?? '').split(' ').includes(f);
+      c.hidden = !show;
+      if (show) { n++; c.classList.add('is-in'); }
+    });
+    if (status) status.textContent = `${n} projects shown`;
+    if (push) history.replaceState(null, '', f === 'all' ? location.pathname : `?category=${f}`);
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? 'all')));
+  const initial = new URLSearchParams(location.search).get('category');
+  if (initial && [...buttons].some((b) => b.dataset.filter === initial)) apply(initial, false);
+</script>

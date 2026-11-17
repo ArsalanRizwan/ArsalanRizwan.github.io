@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Monogram from '../components/Monogram.astro';
+import { site } from '../data/site';
+import { experience } from '../data/experience';
+import { capabilities } from '../data/skills';
+import { testimonials, reviewSummary } from '../data/testimonials';
+---
+<Base title="About" description="Arsalan Rizwan — software developer, creative technologist and AR/VR developer based in Lahore, working at LUMS and through his independent studio.">
+  <section class="container page">
+    <SectionHead as="h1" label="About" title="Arsalan" titleAccent="Rizwan." intro={site.person.identity} />
+
+    <div class="intro">
+      <div class="mark" data-reveal aria-hidden="true"><Monogram size={220} /></div>
+      <div class="text">
+        <p class="big" data-reveal>I’m a software developer and creative technologist interested in building interactive digital experiences that combine technology, creativity and practical problem-solving.</p>
+        <p data-reveal>My work spans Unity development, immersive technologies, software applications, interactive systems and emerging technology. Since November 2022 I’ve worked at the Lahore University of Management Sciences (LUMS), designing and developing AR, VR and MR applications in Unity for Meta Quest and other platforms — industrial training simulations, educational experiences, therapy and wellbeing environments, and research prototypes that move from concept to polished, client-facing builds.</p>
+        <p data-reveal>Alongside that, I take on freelance Unity and VR work for clients around the world through Fiverr, and I build my own products under the studio name — most recently <a href="/work/pocket-weather/" class="u">Pocket Weather</a>, a cozy mobile game published on HUAWEI AppGallery.</p>
+        <p data-reveal>I enjoy exploring new technologies, solving difficult engineering problems and turning ideas into things people can actually hold, wear or play. Arsalan Studio is the home for that work: <span class="serif-i">engineering ideas, creating experiences.</span></p>
+        <dl class="facts" data-reveal>
+          <div><dt class="label">Based in</dt><dd>{site.person.location}</dd></div>
+          <div><dt class="label">Languages</dt><dd>{site.person.languages.join(', ')}</dd></div>
+          <div><dt class="label">Focus</dt><dd>Unity · XR · Games · Software</dd></div>
+          <div><dt class="label">Fiverr</dt><dd>{reviewSummary.rating} ★ from {reviewSummary.count} reviews</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="container">
+      <SectionHead index="01" label="Experience" title="Professional" titleAccent="timeline." />
+      <ol class="tl">
+        {experience.map((e) => (
+          <li class="tl-item" data-reveal>
+            <div class="tl-when">
+              <span class="label label--accent">{e.period}</span>
+              {e.type && <span class="label">{e.type}</span>}
+            </div>
+            <div class="tl-body">
+              <h3>{e.org}</h3>
+              {e.unit && <p class="unit">{e.unit}</p>}
+              <p class="role">{e.role}</p>
+              <p class="muted">{e.summary}</p>
+              <ul>{e.highlights.map((h) => <li>{h}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="label src">Sources: Fiverr profile, GitHub profile and project records. LinkedIn details to be added.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead index="02" label="Capabilities" title="What I" titleAccent="bring." />
+      <div class="caps">
+        {capabilities.map((c) => (
+          <div class="cap" data-reveal>
+            <h3>{c.title}</h3>
+            <ul class="chips">{c.skills.slice(0, 6).map((s) => <li class="chip">{s}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+      <a class="link" href="/expertise/">Full expertise →</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead index="03" label="Kind words" title="From" titleAccent="clients." />
+      <div class="quotes">
+        {testimonials.map((t) => (
+          <figure class="quote" data-reveal>
+            <blockquote><p>“{t.quote}”</p></blockquote>
+            <figcaption><span>{t.who}</span> <span class="label">{t.context}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .intro { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 6vw, 7rem); }
+  .mark { color: var(--graphite); border: 1px solid var(--line); aspect-ratio: 1; display: grid; place-items: center; align-self: start; position: sticky; top: calc(var(--header-h) + 2rem); }
+  .mark :global(svg) { width: 55%; height: auto; color: #3a3f48; }
+  .big { font-size: clamp(1.6rem, 1.1rem + 1.8vw, 2.8rem); line-height: 1.2; letter-spacing: -0.03em; color: var(--ivory); }
+  .text p:not(.big) { color: var(--muted); font-size: 1.1rem; max-width: 62ch; }
+  .u { color: var(--ivory); text-decoration: underline; text-decoration-color: var(--slate); text-underline-offset: 3px; }
+  .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; border-top: 1px solid var(--line); padding-top: 2rem; margin-top: 3rem; }
+  .facts dd { margin: 0.4rem 0 0; }
+  .tl { list-style: none; border-top: 1px solid var(--line); }
+  .tl-item { display: grid; grid-template-columns: 1fr 2.2fr; gap: 2rem; padding: clamp(2rem, 4vw, 3.5rem) 0; border-bottom: 1px solid var(--line); }
+  .tl-when { display: grid; gap: 0.5rem; align-content: start; }
+  .tl-body h3 { font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.2rem); }
+  .unit { color: var(--ivory); margin: 0.4rem 0 0; }
+  .role { color: var(--slate); margin: 0.6rem 0 1.2rem; }
+  .tl-body ul { margin-top: 1rem; padding-left: 1.1rem; color: var(--muted); display: grid; gap: 0.4rem; }
+  .src { margin-top: 2rem; }
+  .caps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem 3rem; margin-bottom: 3rem; }
+  .cap h3 { margin-bottom: 1rem; }
+  .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+  .quote { margin: 0; border-top: 1px solid var(--line-strong); padding-top: 1.5rem; }
+  .quote blockquote { margin: 0; }
+  .quote p { font-family: var(--font-serif); font-size: 1.45rem; line-height: 1.3; }
+  .quote figcaption { display: grid; gap: 0.3rem; margin-top: 1rem; }
+  @media (max-width: 900px) {
+    .intro, .tl-item, .caps, .quotes { grid-template-columns: 1fr; }
+    .mark { position: static; max-width: 220px; }
+  }
+</style>

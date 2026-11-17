@@ -1,0 +1,72 @@
+---
+import Monogram from './Monogram.astro';
+import { nav, social, contact, site } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="statement">
+        <p class="label label--accent">Arsalan Studio</p>
+        <p class="big">Engineering ideas.<br /><span class="serif-i">Creating experiences.</span></p>
+        <a class="mail" href={`mailto:${contact.email}`}>{contact.email}</a>
+      </div>
+      <div class="cols">
+        <div>
+          <p class="label">Navigate</p>
+          <ul>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+        </div>
+        <div>
+          <p class="label">Elsewhere</p>
+          <ul>{social.map((s) => <li><a href={s.href} rel="me noopener" target="_blank">{s.label}<span class="sr-only"> (opens in a new tab)</span></a></li>)}</ul>
+        </div>
+        <div>
+          <p class="label">Legal</p>
+          <ul>
+            <li><a href="/privacy/">Privacy documentation</a></li>
+            <li><a href="/privacy/pocket-weather/huawei/">Pocket Weather — Huawei</a></li>
+            <li><a href="/privacy/pocket-weather/ios/">Pocket Weather — iOS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="wordmark" aria-hidden="true">
+      <Monogram size={72} />
+      <svg class="wm-text" viewBox="0 0 1000 100" preserveAspectRatio="xMinYMid meet" focusable="false">
+        <text x="0" y="82" textLength="1000" lengthAdjust="spacingAndGlyphs">ARSALAN STUDIO</text>
+      </svg>
+    </div>
+    <div class="bottom">
+      <p>© {year} {site.person.name}. All rights reserved.</p>
+      <p>{site.person.location}</p>
+      <a href="#main" class="link">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--line); padding-top: clamp(4rem, 8vw, 8rem); padding-bottom: 2rem; }
+  .top { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; }
+  .big { font-size: clamp(2rem, 1.4rem + 2.6vw, 3.4rem); line-height: 1.05; letter-spacing: -0.03em; margin: 1rem 0 2rem; }
+  .mail { font-size: var(--fs-lead); border-bottom: 1px solid var(--line-strong); padding-bottom: 0.2rem; transition: border-color 0.3s; word-break: break-all; }
+  .mail:hover { border-color: var(--ivory); }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .cols ul { list-style: none; margin-top: 1rem; display: grid; gap: 0.55rem; }
+  .cols a { color: var(--muted); font-size: var(--fs-small); transition: color 0.3s; }
+  .cols a:hover { color: var(--ivory); }
+  .wordmark {
+    display: flex; align-items: center; gap: clamp(1rem, 2vw, 2rem);
+    margin-top: clamp(4rem, 8vw, 7rem); padding-block: 2rem; border-top: 1px solid var(--line);
+    color: var(--graphite); font-weight: 800; letter-spacing: 0.04em;
+    font-size: clamp(2.2rem, 9.2vw, 9.5rem); line-height: 0.9; white-space: nowrap; overflow: hidden;
+  }
+  .wordmark :global(svg) { flex: none; width: 0.8em; height: 0.8em; color: #2b2f36; }
+  .wm-text { flex: 1; min-width: 0; height: auto; width: 100%; }
+  .wm-text text { fill: #2b2f36; font-family: var(--font-sans); font-weight: 800; font-size: 100px; }
+  .bottom { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: center; color: var(--subtle); font-size: var(--fs-small); }
+  .bottom p { margin: 0; }
+  @media (max-width: 860px) {
+    .top { grid-template-columns: 1fr; }
+    .cols { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

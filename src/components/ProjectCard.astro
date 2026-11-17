@@ -1,0 +1,40 @@
+---
+import ProjectVisual from './ProjectVisual.astro';
+import type { Project } from '../data/types';
+import { categories } from '../data/types';
+import { projectHref } from '../data/projects';
+
+interface Props { project: Project; index?: number; size?: 'lg' | 'md'; eager?: boolean }
+const { project, index, size = 'md', eager = false } = Astro.props;
+const cat = categories.find((c) => c.id === project.category);
+---
+<article class={`card card--${size}`} data-reveal data-category={[project.category, ...(project.alsoIn ?? [])].join(' ')}>
+  <a href={projectHref(project)} class="card-link">
+    <div class="card-media">
+      <ProjectVisual project={project} eager={eager} sizes={size === 'lg' ? '(max-width: 800px) 100vw, 60vw' : '(max-width: 800px) 100vw, 40vw'} />
+    </div>
+    <div class="card-meta">
+      <div class="card-top">
+        {typeof index === 'number' && <span class="index-num">{String(index + 1).padStart(2, '0')}</span>}
+        <span class="label">{cat?.label}</span>
+        {project.year && <span class="label">{project.year}</span>}
+      </div>
+      <h3 class="card-title">{project.title}<span class="card-arrow" aria-hidden="true">↗</span></h3>
+      <p class="card-desc">{project.shortDescription}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card-link { display: block; }
+  .card-media { overflow: hidden; }
+  .card-media :global(img), .card-media :global(.placeholder-art) { transition: transform 1.4s var(--ease), filter 0.8s var(--ease); }
+  .card-link:hover .card-media :global(img), .card-link:hover .card-media :global(.placeholder-art) { transform: scale(1.04); }
+  .card-meta { padding-top: 1.25rem; }
+  .card-top { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; margin-bottom: 0.6rem; }
+  .card-title { font-size: var(--fs-h3); display: flex; justify-content: space-between; gap: 1rem; }
+  .card--lg .card-title { font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem); }
+  .card-arrow { color: var(--slate); transition: transform 0.5s var(--ease); flex: none; }
+  .card-link:hover .card-arrow { transform: translate(3px, -3px); }
+  .card-desc { color: var(--muted); margin-top: 0.6rem; max-width: 52ch; font-size: 0.98rem; }
+</style>

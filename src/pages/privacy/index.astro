@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { huaweiPolicy } from '../../data/privacy/pocket-weather-huawei';
+import { iosPolicy } from '../../data/privacy/pocket-weather-ios';
+import { contact } from '../../data/site';
+
+const policies = [
+  { p: huaweiPolicy, href: '/privacy/pocket-weather/huawei/', platform: 'HUAWEI AppGallery', state: 'In effect' },
+  { p: iosPolicy, href: '/privacy/pocket-weather/ios/', platform: 'Apple App Store', state: 'Draft — app not yet released' },
+];
+---
+<Base title="Privacy" description="Privacy documentation for apps published by Arsalan Rizwan, including Pocket Weather for HUAWEI AppGallery and Apple iOS.">
+  <div class="container page">
+    <SectionHead as="h1" label="Privacy documentation" title="Privacy," titleAccent="plainly written." intro="Each app and each distribution build has its own policy, because different stores mean different services. These pages describe what each version actually does." />
+
+    <section aria-labelledby="pw-h">
+      <h2 id="pw-h" class="group-title"><span class="label label--accent">Pocket Weather</span></h2>
+      <ul class="list">
+        {policies.map(({ p, href, platform, state }) => (
+          <li data-reveal>
+            <a href={href} class="row">
+              <span class="r-title">{p.app} — {platform}</span>
+              <span class={`status ${p.status === 'draft' ? 'status--soon' : 'status--available'}`}>{state}</span>
+              <span class="r-date muted">Last updated {p.lastUpdated}</span>
+              <span class="r-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="other" aria-labelledby="other-h">
+      <h2 id="other-h" class="label">Other apps</h2>
+      <p class="muted">Policies for other published apps will be listed here when they are added. Questions about privacy: <a class="mail" href={`mailto:${contact.email}`}>{contact.email}</a>.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .group-title { margin-bottom: 1.5rem; }
+  .list { list-style: none; border-top: 1px solid var(--line); }
+  .list li { border-bottom: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 1.6fr 1fr 1fr auto; gap: 1rem 2rem; align-items: center; padding: 1.8rem 0; transition: padding 0.5s var(--ease); }
+  .row:hover { padding-left: 1rem; }
+  .r-title { font-size: var(--fs-h3); letter-spacing: -0.02em; }
+  .r-arrow { color: var(--slate); font-size: 1.4rem; }
+  .other { margin-top: 5rem; max-width: 60ch; }
+  .other p { margin-top: 1rem; }
+  .mail { color: var(--text); text-decoration: underline; text-decoration-color: var(--slate); text-underline-offset: 3px; }
+  @media (max-width: 800px) { .row { grid-template-columns: 1fr auto; } .r-date { grid-column: 1; } .r-arrow { grid-row: 1; grid-column: 2; } }
+</style>

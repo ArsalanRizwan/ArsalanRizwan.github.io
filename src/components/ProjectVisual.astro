@@ -1,0 +1,53 @@
+---
+/**
+ * Project cover. Uses the real image when available; otherwise a typographic
+ * placeholder that is clearly marked as awaiting a real asset.
+ */
+import { Image } from 'astro:assets';
+import type { Project } from '../data/types';
+import { categories } from '../data/types';
+
+interface Props {
+  project: Project;
+  sizes?: string;
+  eager?: boolean;
+  ratio?: string;
+  fit?: 'cover' | 'contain';
+}
+const { project, sizes = '(max-width: 800px) 100vw, 50vw', eager = false, ratio = '4 / 3', fit = 'cover' } = Astro.props;
+const cat = categories.find((c) => c.id === project.category);
+const initials = project.title
+  .split(/\s+/)
+  .filter((w) => /^[A-Za-z0-9]/.test(w))
+  .slice(0, 2)
+  .map((w) => w[0])
+  .join('')
+  .toUpperCase();
+---
+<div class={`media pv pv--${fit}`} style={`aspect-ratio:${ratio}`}>
+  {project.cover ? (
+    <Image
+      src={project.cover.src}
+      alt={project.cover.alt}
+      widths={[480, 800, 1200, 1600]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  ) : (
+    <div class="placeholder-art" role="img" aria-label={`${project.title} — image coming soon`}>
+      <span class="pv-initials serif">{initials}</span>
+      <span class="pv-cat label">{cat?.short}</span>
+      <span class="pv-tag label">Visual pending</span>
+    </div>
+  )}
+</div>
+
+<style>
+  .pv { width: 100%; }
+  .pv--contain :global(img) { object-fit: contain; background: #0d0e10; }
+  .pv-initials { position: relative; font-size: clamp(4rem, 10vw, 9rem); color: rgba(241, 240, 236, 0.85); line-height: 1; }
+  .pv-cat { position: absolute; left: 1rem; top: 1rem; }
+  .pv-tag { position: absolute; right: 1rem; bottom: 1rem; color: var(--slate); font-size: 0.62rem; }
+</style>

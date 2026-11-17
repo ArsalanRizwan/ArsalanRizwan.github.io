@@ -1,0 +1,27 @@
+---
+interface Props { index?: string; label: string; title: string; titleAccent?: string; intro?: string; as?: 'h1' | 'h2' }
+const { index, label, title, titleAccent, intro, as = 'h2' } = Astro.props;
+const Tag = as;
+---
+<header class="sh">
+  <div class="sh-label" data-reveal>
+    {index && <span class="index-num">{index}</span>}
+    <span class="label label--accent">{label}</span>
+  </div>
+  <div class="sh-main">
+    <Tag class="sh-title" data-reveal>
+      {title}{titleAccent && <> <span class="serif-i">{titleAccent}</span></>}
+    </Tag>
+    {intro && <p class="lead sh-intro" data-reveal style="--delay:.1s">{intro}</p>}
+    <slot />
+  </div>
+</header>
+
+<style>
+  .sh { display: grid; grid-template-columns: minmax(160px, 3fr) 9fr; gap: 1.5rem clamp(1rem, 2vw, 2rem); margin-bottom: clamp(3rem, 6vw, 6rem); }
+  .sh-label { display: flex; gap: 1rem; align-items: baseline; padding-top: 0.8rem; }
+  .sh-title { max-width: 18ch; }
+  h1.sh-title { font-size: var(--fs-h1); max-width: 14ch; }
+  .sh-intro { margin-top: 1.6rem; max-width: 56ch; }
+  @media (max-width: 800px) { .sh { grid-template-columns: 1fr; } }
+</style>

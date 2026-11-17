@@ -1,0 +1,322 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { pocketWeather as pw } from '../../data/pocket-weather';
+
+const ld = [{
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  name: pw.title,
+  description: pw.tagline,
+  genre: ['Casual', 'Puzzle'],
+  gamePlatform: pw.platforms.filter((p) => p.status === 'available').map((p) => p.os),
+  operatingSystem: 'Android',
+  applicationCategory: 'GameApplication',
+  contentRating: 'Rated 7+ (AppGallery)',
+  author: { '@type': 'Person', name: 'Muhammad Arsalan Rizwan' },
+  url: pw.appGalleryUrl,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: pw.appGalleryUrl },
+}];
+const featured = pw.gallery.slice(0, 7);
+const more = pw.gallery.slice(7);
+---
+<Base
+  title="Pocket Weather — Case Study"
+  description="Pocket Weather is a cozy mobile puzzle game where you play a little rain cloud bringing tiny islands back to life. Available on HUAWEI AppGallery; iOS coming soon."
+  image="/brand/og-pocket-weather.png"
+  imageAlt="Pocket Weather — be a little rain cloud"
+  type="article"
+  jsonLd={ld}
+>
+  <!-- HERO -->
+  <section class="pw-hero">
+    <div class="container pw-hero-grid">
+      <div class="pw-hero-copy">
+        <nav class="label crumbs" aria-label="Breadcrumb"><a href="/work/">Work</a> <span aria-hidden="true">/</span> <span aria-current="page">Pocket Weather</span></nav>
+        <div class="pw-id" data-reveal>
+          <Image src={pw.icon} alt="Pocket Weather app icon" width={88} height={88} densities={[1, 2, 3]} class="pw-icon" loading="eager" />
+          <div>
+            <p class="label label--accent">Featured product · Mobile game</p>
+            <p class="label">Game Development · Software & Mobile</p>
+          </div>
+        </div>
+        <h1 class="pw-title"><span class="split-line" data-reveal><span>POCKET</span></span><span class="split-line" data-reveal style="--delay:.08s"><span>WEATHER</span></span></h1>
+        <p class="lead" data-reveal style="--delay:.15s">{pw.positioning}</p>
+        <p class="pw-tagline serif-i" data-reveal style="--delay:.2s">“{pw.tagline}”</p>
+        <div class="pw-ctas" data-reveal style="--delay:.25s">
+          <a class="btn btn--primary" href={pw.appGalleryUrl} target="_blank" rel="noopener">Get it on AppGallery <span class="arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+          <a class="btn btn--ghost" href="#platforms">Platform availability</a>
+        </div>
+      </div>
+      <div class="pw-hero-phones" aria-hidden="false">
+        <figure class="phone phone--back" data-reveal style="--delay:.15s">
+          <Image src={pw.gallery[4].src} alt={pw.gallery[4].alt} widths={[300, 520]} sizes="(max-width: 900px) 40vw, 22vw" loading="eager" />
+        </figure>
+        <figure class="phone phone--front" data-reveal>
+          <Image src={pw.gallery[0].src} alt={pw.gallery[0].alt} widths={[340, 600]} sizes="(max-width: 900px) 50vw, 26vw" loading="eager" fetchpriority="high" />
+        </figure>
+      </div>
+    </div>
+    <div class="container">
+      <dl class="facts" data-reveal>
+        {pw.facts.map((f) => <div><dt class="label">{f.k}</dt><dd>{f.v}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <!-- A. OVERVIEW -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="A" label="Project overview" title="A small cloud with" titleAccent="a big job." />
+      <div class="two-col">
+        <div class="prose-lg">
+          {pw.overview.map((p, i) => <p data-reveal style={`--delay:${i * 0.05}s`}>{p}</p>)}
+        </div>
+        <aside class="from-store" data-reveal>
+          <p class="label label--accent">From the store listing</p>
+          <ul>{pw.storeFeatures.map((f) => <li>{f}</li>)}</ul>
+          <p class="src label">Source: HUAWEI AppGallery listing</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. GAMEPLAY -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="B" label="Gameplay" title="Balance, not" titleAccent="speed." intro="Every level is a small ecosystem. Water too little and plants wither; too much and they drown. Hazards and helpers change what a ‘good shower’ means." />
+    </div>
+    <div class="strip-wrap">
+      <ul class="strip" tabindex="0" aria-label="Pocket Weather screenshots (scrollable)">
+        {featured.map((g, i) => (
+          <li class="strip-item" data-reveal style={`--delay:${i * 0.05}s`}>
+            <figure>
+              <div class="phone"><Image src={g.src} alt={g.alt} widths={[300, 540]} sizes="(max-width: 700px) 62vw, 22vw" /></div>
+              <figcaption><span class="index-num">{String(i + 1).padStart(2, '0')}</span> {g.caption}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="container">
+      <div class="mechanics">
+        {pw.mechanics.map((m, i) => (
+          <div class="mech" data-reveal style={`--delay:${(i % 3) * 0.06}s`}>
+            <h3>{m.name}</h3>
+            <p>{m.detail}</p>
+          </div>
+        ))}
+      </div>
+      <p class="src label">Mechanics confirmed in the game’s Unity source.</p>
+    </div>
+  </section>
+
+  <!-- PROGRESSION -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="B.2" label="Progression & rewards" title="Reasons to" titleAccent="come back." />
+      <div class="prog">
+        <div class="prog-list">
+          {pw.progression.map((p) => (
+            <div class="prog-item" data-reveal>
+              <h3>{p.name}</h3>
+              <p class="muted">{p.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="prog-phones">
+          {more.concat(pw.gallery[6]).slice(0, 4).map((g, i) => (
+            <figure class="phone" data-reveal style={`--delay:${i * 0.06}s`}>
+              <Image src={g.src} alt={g.alt} widths={[260, 480]} sizes="(max-width: 900px) 45vw, 18vw" />
+              <figcaption class="label">{g.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. DEVELOPMENT -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="C" label="Development" title="Built with" titleAccent="care, end to end." intro="Designed, programmed and shipped by Arsalan Rizwan. Only technologies confirmed in the project are listed." />
+      <ul class="tech" data-reveal>
+        {pw.technologies.map((t) => (
+          <li><span class="t-name">{t.name}</span><span class="t-detail muted">{t.detail}</span></li>
+        ))}
+      </ul>
+      <div class="dev-grid">
+        {pw.development.map((d, i) => (
+          <article class="dev" data-reveal style={`--delay:${(i % 2) * 0.06}s`}>
+            <span class="index-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{d.title}</h3>
+            <p class="muted">{d.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- D. PLATFORMS -->
+  <section class="section" id="platforms">
+    <div class="container">
+      <SectionHead index="D" label="Platform availability" title="Two stores," titleAccent="two builds." />
+      <div class="platforms">
+        {pw.platforms.map((p) => (
+          <article class={`platform platform--${p.status}`} data-reveal>
+            <div class="pl-top">
+              <p class="label">{p.os}</p>
+              <span class={`status ${p.status === 'available' ? 'status--available' : 'status--soon'}`}>{p.status === 'available' ? 'Available' : 'Coming soon'}</span>
+            </div>
+            <h3 class="pl-store">{p.store}</h3>
+            <p class="muted">{p.summary}</p>
+            <dl class="pl-dl">
+              {p.version && <div><dt class="label">Version</dt><dd>{p.version}</dd></div>}
+              {p.updated && <div><dt class="label">Updated</dt><dd>{p.updated}</dd></div>}
+              <div><dt class="label">Advertising</dt><dd>{p.advertising}</dd></div>
+              <div><dt class="label">Purchases</dt><dd>{p.purchases}</dd></div>
+            </dl>
+            <div class="pl-actions">
+              {p.status === 'available' && p.url ? (
+                <a class="btn btn--primary" href={p.url} target="_blank" rel="noopener">View on {p.store} <span class="arrow" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+              ) : (
+                <span class="btn btn--ghost is-disabled" aria-disabled="true">Not yet available</span>
+              )}
+              <a class="link" href={p.privacyPolicy}>Privacy policy</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- E. INTEGRATIONS -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="E" label="Advertising & platform integrations" title="Platform-specific" titleAccent="by design." intro="The Huawei build keeps the Huawei services that ship today. The iOS build is planned around Google AdMob and Apple-native purchases, with every Huawei SDK removed." />
+      <div class="integrations">
+        <div data-reveal>
+          <h3 class="int-h">HUAWEI AppGallery build <span class="status status--available">Shipped</span></h3>
+          <ul class="int-list">
+            {pw.integrations.huawei.map((x) => (
+              <li><span class="t-name">{x.name}</span><code>{x.pkg}</code><p class="muted">{x.use}</p></li>
+            ))}
+          </ul>
+        </div>
+        <div data-reveal style="--delay:.08s">
+          <h3 class="int-h">iOS build <span class="status status--soon">Planned</span></h3>
+          <ul class="int-list">
+            {pw.integrations.ios.map((x) => (
+              <li><span class="t-name">{x.name}</span><code>{x.pkg}</code><p class="muted">{x.use}</p></li>
+            ))}
+          </ul>
+          <p class="note">The iOS version has not been submitted to or approved by Apple. Its privacy policy is a <a href="/privacy/pocket-weather/ios/">published draft</a> with an open checklist.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section next">
+    <div class="container next-grid">
+      <p class="label label--accent">Privacy</p>
+      <div>
+        <p class="next-title">Read the policies for <a href="/privacy/pocket-weather/huawei/">HUAWEI AppGallery</a> and <a href="/privacy/pocket-weather/ios/">Apple iOS</a>.</p>
+        <a class="link" href="/work/">← All work</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pw-hero { padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 5rem)); padding-bottom: clamp(3rem, 6vw, 6rem); position: relative; overflow: hidden; }
+  .pw-hero::before {
+    content: ''; position: absolute; inset: 0 0 30% 40%; pointer-events: none;
+    background: radial-gradient(60% 60% at 60% 40%, rgba(130, 152, 181, 0.16), transparent 70%);
+  }
+  .pw-hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; position: relative; }
+  .crumbs { display: flex; gap: 0.6rem; margin-bottom: 2.5rem; }
+  .crumbs a { color: var(--subtle); } .crumbs a:hover { color: var(--ivory); }
+  .pw-id { display: flex; gap: 1.2rem; align-items: center; margin-bottom: 2rem; }
+  .pw-id > div { display: grid; gap: 0.3rem; }
+  .pw-id :global(.pw-icon) { border-radius: 22%; }
+  .pw-title { font-size: var(--fs-display); font-weight: 600; letter-spacing: -0.05em; line-height: 0.86; margin-bottom: 2rem; }
+  .pw-tagline { font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem); color: var(--ivory); margin: 1.5rem 0 2.5rem; max-width: 32ch; line-height: 1.3; }
+  .pw-ctas { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .pw-hero-phones { position: relative; min-height: 520px; }
+  .phone { margin: 0; border-radius: 28px; overflow: hidden; border: 1px solid var(--line-strong); background: #000; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7); }
+  .phone :global(img) { width: 100%; height: auto; }
+  .phone--front { position: relative; width: min(62%, 320px); margin-left: auto; margin-right: 6%; z-index: 2; }
+  .phone--back { position: absolute; width: min(48%, 250px); left: 4%; top: 14%; opacity: 0.75; transform: rotate(-6deg); }
+  @media (prefers-reduced-motion: no-preference) { .js .phone--back.is-in { transform: rotate(-6deg); } }
+
+  .facts { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.5rem; border-top: 1px solid var(--line); padding-top: 1.5rem; margin: clamp(3rem, 6vw, 5rem) 0 0; }
+  .facts dd { margin: 0.4rem 0 0; font-size: 0.95rem; }
+
+  .two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(2rem, 6vw, 6rem); }
+  .prose-lg p { font-size: var(--fs-lead); line-height: 1.55; color: var(--muted); }
+  .prose-lg p:first-child { color: var(--ivory); }
+  .from-store { border: 1px solid var(--line); padding: 2rem; align-self: start; }
+  .from-store ul { list-style: none; margin: 1.2rem 0; display: grid; gap: 0.8rem; }
+  .from-store li { padding-left: 1.2rem; position: relative; color: var(--muted); font-size: 0.97rem; }
+  .from-store li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 6px; height: 1px; background: var(--slate); }
+  .src { margin-top: 1.5rem; color: var(--subtle); font-size: 0.65rem; }
+
+  .strip-wrap { overflow: hidden; }
+  .strip { list-style: none; display: flex; gap: clamp(1rem, 2vw, 2rem); overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 var(--gutter) 1.5rem; scrollbar-width: thin; scrollbar-color: var(--graphite) transparent; }
+  .strip:focus-visible { outline-offset: -2px; }
+  .strip-item { flex: 0 0 clamp(220px, 22vw, 300px); scroll-snap-align: start; }
+  .strip-item figure { margin: 0; }
+  .strip-item figcaption { margin-top: 1rem; font-size: var(--fs-small); color: var(--muted); }
+  .mechanics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: clamp(3rem, 6vw, 6rem); border-top: 1px solid var(--line); }
+  .mech { padding: 2rem 2rem 2rem 0; border-bottom: 1px solid var(--line); }
+  .mech h3 { font-size: 1.2rem; margin-bottom: 0.7rem; }
+  .mech p { color: var(--muted); font-size: 0.97rem; margin: 0; }
+
+  .prog { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .prog-item { padding: 1.6rem 0; border-top: 1px solid var(--line); }
+  .prog-item h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .prog-item p { margin: 0; }
+  .prog-phones { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .prog-phones figure:nth-child(even) { transform: translateY(3rem); }
+  .prog-phones figcaption { padding: 0.8rem 1rem; background: var(--obsidian); }
+
+  .tech { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .tech li { display: grid; gap: 0.3rem; padding: 1.3rem 1.5rem 1.3rem 0; border-bottom: 1px solid var(--line); min-width: 0; overflow-wrap: anywhere; }
+  .t-name { font-weight: 600; }
+  .t-detail { font-size: var(--fs-small); }
+  .dev-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1.5rem, 3vw, 3rem); }
+  .dev { background: var(--surface); padding: clamp(1.5rem, 3vw, 2.5rem); border: 1px solid var(--line); }
+  .dev h3 { margin: 1rem 0 0.8rem; font-size: 1.35rem; }
+  .dev p { margin: 0; }
+
+  .platforms { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2vw, 2rem); }
+  .platform { border: 1px solid var(--line); padding: clamp(1.5rem, 3vw, 2.75rem); display: flex; flex-direction: column; gap: 1rem; background: linear-gradient(180deg, rgba(241, 240, 236, 0.025), transparent); }
+  .platform--coming-soon { border-style: dashed; }
+  .pl-top { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .pl-store { font-size: clamp(1.8rem, 1.3rem + 1.6vw, 2.8rem); }
+  .pl-dl { display: grid; gap: 1rem; margin: 0.5rem 0 1rem; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+  .pl-dl dd { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .pl-actions { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
+  .is-disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .integrations { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(2rem, 5vw, 5rem); }
+  .int-h { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; font-size: 1.4rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--line); }
+  .int-list { list-style: none; }
+  .int-list li { padding: 1.3rem 0; border-bottom: 1px solid var(--line); display: grid; gap: 0.35rem; min-width: 0; overflow-wrap: anywhere; }
+  .int-list code { font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.78rem; color: var(--slate); }
+  .int-list p { margin: 0; font-size: 0.95rem; }
+  .integrations .note { margin-top: 1.5rem; }
+  .integrations .note a { text-decoration: underline; color: var(--ivory); }
+
+  .next-grid { display: grid; grid-template-columns: 3fr 9fr; gap: 2rem; }
+  .next-title { font-size: var(--fs-h3); max-width: 30ch; }
+  .next-title a { text-decoration: underline; text-decoration-color: var(--slate); text-underline-offset: 4px; }
+
+  @media (max-width: 1100px) { .facts { grid-template-columns: repeat(3, 1fr); } .tech { grid-template-columns: repeat(2, 1fr); } .mechanics { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .pw-hero-grid, .two-col, .prog, .platforms, .integrations, .dev-grid, .next-grid { grid-template-columns: 1fr; }
+    .pw-hero-phones { min-height: 420px; max-width: 520px; width: 100%; margin-inline: auto; }
+  }
+  @media (max-width: 600px) { .facts, .tech, .mechanics { grid-template-columns: 1fr 1fr; } .mechanics { grid-template-columns: 1fr; } .mech { padding-right: 0; } }
+</style>

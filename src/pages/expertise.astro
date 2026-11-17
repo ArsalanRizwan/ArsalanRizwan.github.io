@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { capabilities } from '../data/skills';
+import { projects } from '../data/projects';
+
+const process = [
+  { t: 'Understand', d: 'Start from the idea, GDD, prototype or existing Unity project — and the people who will use it.' },
+  { t: 'Prototype', d: 'Get the core interaction into a headset or a phone early, then tune what it feels like.' },
+  { t: 'Build', d: 'Systems, UI, environments and integrations built to be maintained, not just demoed.' },
+  { t: 'Optimise & ship', d: 'Hardware testing, performance work, store builds and documentation.' },
+];
+const xrCount = projects.filter((p) => p.category === 'xr' || p.alsoIn?.includes('xr')).length;
+---
+<Base title="Expertise" description="Capabilities of Arsalan Studio: game development, immersive technology (AR, VR, MR on Meta Quest), software development and emerging technologies.">
+  <div class="container page">
+    <SectionHead as="h1" label="Expertise" title="Capabilities," titleAccent="honestly listed." intro={`Grounded in shipped work — ${xrCount} XR projects, a published mobile game and years of Unity engineering.`} />
+
+    {capabilities.map((c, i) => (
+      <section class="cap" id={c.id} aria-labelledby={`${c.id}-h`}>
+        <div class="cap-head" data-reveal>
+          <span class="index-num">0{i + 1}</span>
+          <h2 id={`${c.id}-h`}>{c.title}</h2>
+        </div>
+        <div class="cap-body">
+          <p class="lead" data-reveal>{c.intro}</p>
+          <ul class="skills" data-reveal>{c.skills.map((s) => <li>{s}</li>)}</ul>
+          <p class="label ev" data-reveal>Evidence — {c.evidence}</p>
+        </div>
+      </section>
+    ))}
+
+    <section class="process" aria-labelledby="proc-h">
+      <h2 id="proc-h" class="label label--accent">How I work</h2>
+      <ol>
+        {process.map((p, i) => (
+          <li data-reveal style={`--delay:${i * 0.06}s`}>
+            <span class="index-num">0{i + 1}</span>
+            <h3>{p.t}</h3>
+            <p class="muted">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .cap { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem clamp(2rem, 6vw, 6rem); padding: clamp(2.5rem, 5vw, 5rem) 0; border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 2rem); }
+  .cap-head { display: flex; gap: 1.5rem; align-items: baseline; }
+  .cap-head h2 { font-size: clamp(2rem, 1.3rem + 2.8vw, 4rem); }
+  .cap-body .lead { margin-top: 0.5rem; color: var(--ivory); }
+  .skills { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); margin-top: 2rem; }
+  .skills li { padding: 0.9rem 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .ev { margin-top: 1.5rem; text-transform: none; letter-spacing: 0.02em; font-weight: 500; }
+  .process { border-top: 1px solid var(--line); padding-top: clamp(3rem, 6vw, 6rem); }
+  .process ol { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 2.5rem; }
+  .process h3 { font-size: 1.4rem; margin: 1rem 0 0.6rem; }
+  .process p { margin: 0; }
+  @media (max-width: 900px) { .cap { grid-template-columns: 1fr; } .process ol { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .skills, .process ol { grid-template-columns: 1fr; } }
+</style>

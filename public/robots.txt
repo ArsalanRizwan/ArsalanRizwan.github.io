@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arsalanrizwan.github.io/sitemap-index.xml

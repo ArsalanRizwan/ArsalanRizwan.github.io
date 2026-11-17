@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { lab } from '../data/lab';
+import { projects } from '../data/projects';
+
+const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
+---
+<Base title="The Lab" description="The Lab at Arsalan Studio: experiments, prototypes and technical explorations in XR, AI, procedural generation and interaction.">
+  <div class="container page">
+    <SectionHead as="h1" label="The Lab" title="Exploring ideas beyond" titleAccent="the conventional." intro="Prototypes, technical experiments and research sketches. Some become products; most teach something worth keeping." />
+    <ol class="lab">
+      {lab.map((l, i) => {
+        const proj = l.project ? bySlug[l.project] : undefined;
+        const href = proj ? (proj.customPage ?? `/work/${proj.slug}/`) : l.link?.href;
+        const external = !proj && !!l.link;
+        return (
+          <li class="exp" data-reveal style={`--delay:${(i % 3) * 0.05}s`}>
+            <div class="exp-top">
+              <span class="index-num">E{String(i + 1).padStart(2, '0')}</span>
+              <span class="label">{l.kind}</span>
+            </div>
+            <h2>{l.title}</h2>
+            <p class="muted">{l.summary}</p>
+            <ul class="chips">{l.tags.map((t) => <li class="chip">{t}</li>)}</ul>
+            {href && (
+              <a class="link" href={href} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+                {proj ? 'View project →' : `${l.link!.label} ↗`}
+                {external && <span class="sr-only"> (opens in a new tab)</span>}
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .lab { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .exp { display: flex; flex-direction: column; gap: 1rem; padding: clamp(1.5rem, 2.5vw, 2.5rem); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 320px; transition: background-color 0.4s var(--ease); }
+  .exp:hover { background: rgba(241, 240, 236, 0.03); }
+  .exp-top { display: flex; justify-content: space-between; }
+  .exp h2 { font-size: 1.45rem; letter-spacing: -0.02em; line-height: 1.2; }
+  .exp p { margin: 0; flex: 1; }
+  .exp .link { align-self: flex-start; }
+  @media (max-width: 1000px) { .lab { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .lab { grid-template-columns: 1fr; } .exp { min-height: 0; } }
+</style>

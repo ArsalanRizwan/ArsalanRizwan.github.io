@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact, social, site } from '../data/site';
+---
+<Base title="Contact" description="Contact Arsalan Rizwan for Unity, AR, VR, MR, game and software development projects.">
+  <section class="container page">
+    <p class="label label--accent" data-reveal>Contact</p>
+    <h1 class="title">
+      <span class="split-line" data-reveal><span>Have an interesting idea?</span></span>
+      <span class="split-line" data-reveal style="--delay:.08s"><span class="serif-i">Let’s build something meaningful.</span></span>
+    </h1>
+
+    <div class="grid">
+      <div class="primary" data-reveal>
+        <p class="label">Email — the fastest way to reach me</p>
+        <a class="email" href={`mailto:${contact.email}?subject=${encodeURIComponent('Project enquiry — Arsalan Studio')}`}>{contact.email}</a>
+        <button type="button" class="link copy" data-copy={contact.email}>Copy address</button>
+        <p class="muted hint">Tell me a little about the idea, the platform (Quest, mobile, web, PC) and your timeline. I usually reply within a day or two.</p>
+        {site.availability.show && <p class="status status--available">{site.availability.label}</p>}
+      </div>
+      <ul class="socials" data-reveal style="--delay:.08s">
+        {social.map((s) => (
+          <li>
+            <a href={s.href} target="_blank" rel="me noopener">
+              <span class="s-label">{s.label}</span>
+              <span class="muted s-handle">{s.handle}</span>
+              <span class="s-arrow" aria-hidden="true">↗</span>
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); min-height: 80vh; }
+  .title { font-size: clamp(2.4rem, 1.2rem + 5vw, 6.5rem); letter-spacing: -0.045em; margin: 1.5rem 0 clamp(3rem, 7vw, 7rem); max-width: 18ch; }
+  .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(2rem, 6vw, 6rem); border-top: 1px solid var(--line); padding-top: 3rem; }
+  .email { display: inline-block; font-size: clamp(1.3rem, 0.8rem + 2.4vw, 2.8rem); letter-spacing: -0.03em; margin: 1rem 0 0.8rem; border-bottom: 1px solid var(--line-strong); word-break: break-all; transition: border-color 0.3s; }
+  .email:hover { border-color: var(--ivory); }
+  .copy { background: none; border: 0; color: var(--muted); cursor: pointer; font-family: inherit; display: flex; }
+  .hint { margin-top: 2rem; max-width: 48ch; }
+  .socials { list-style: none; border-top: 1px solid var(--line); }
+  .socials li { border-bottom: 1px solid var(--line); }
+  .socials a { display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: baseline; padding: 1.3rem 0; transition: padding 0.4s var(--ease); }
+  .socials a:hover { padding-left: 0.75rem; }
+  .s-label { font-size: 1.4rem; letter-spacing: -0.02em; }
+  .s-handle { font-size: var(--fs-small); }
+  .s-arrow { color: var(--slate); }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .s-handle { display: none; } .socials a { grid-template-columns: 1fr auto; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copy ?? '');
+        b.textContent = 'Copied ✓';
+      } catch {
+        b.textContent = 'Copy failed — select the address above';
+      }
+      setTimeout(() => (b.textContent = 'Copy address'), 2500);
+    });
+  });
+</script>

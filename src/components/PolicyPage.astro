@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import type { Policy } from '../data/privacy/types';
+
+interface Props { policy: Policy; checklist?: { area: string; items: string[] }[]; checklistTitle?: string }
+const { policy, checklist, checklistTitle } = Astro.props;
+---
+<Base
+  title={policy.title}
+  description={policy.description}
+  image="/brand/og-pocket-weather.png"
+  imageAlt="Pocket Weather privacy policy"
+  type="article"
+>
+  <article class="policy container">
+    <nav class="crumbs label" aria-label="Breadcrumb">
+      <a href="/privacy/">Privacy</a> <span aria-hidden="true">/</span>
+      <a href="/work/pocket-weather/">Pocket Weather</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{policy.slug === 'ios' ? 'iOS' : 'Huawei'}</span>
+    </nav>
+
+    <header class="p-head">
+      <p class="label label--accent">Privacy Policy{policy.status === 'draft' && ' · Draft'}</p>
+      <h1>{policy.app}<br /><span class="serif-i">{policy.slug === 'ios' ? 'Apple iOS' : 'HUAWEI AppGallery'}</span></h1>
+      <dl class="p-meta">
+        <div><dt class="label">App</dt><dd>{policy.app}</dd></div>
+        <div><dt class="label">Platform</dt><dd>{policy.platform}</dd></div>
+        <div><dt class="label">Effective</dt><dd>{policy.effectiveDate}</dd></div>
+        <div><dt class="label">Last updated</dt><dd>{policy.lastUpdated}</dd></div>
+        <div><dt class="label">Developer</dt><dd>{policy.developer}</dd></div>
+        <div><dt class="label">Contact</dt><dd><a href={`mailto:${policy.contactEmail}`}>{policy.contactEmail}</a></dd></div>
+      </dl>
+      {policy.draftNotice && <p class="note draft"><strong>Draft.</strong> {policy.draftNotice}</p>}
+    </header>
+
+    <section class="p-summary" aria-labelledby="summary-h">
+      <h2 id="summary-h" class="label">At a glance</h2>
+      <ul>
+        {policy.summary.map((s) => (
+          <li><span class="label">{s.label}</span><span>{s.value}</span></li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="p-body">
+      <nav class="toc" aria-label="Contents">
+        <p class="label">Contents</p>
+        <ol>{policy.sections.map((s) => <li><a href={`#${s.id}`}>{s.heading.replace(/^\d+\.\s*/, '')}</a></li>)}</ol>
+      </nav>
+      <div class="prose">
+        {policy.sections.map((s) => (
+          <section id={s.id} aria-labelledby={`${s.id}-h`}>
+            <h2 id={`${s.id}-h`}>{s.heading}</h2>
+            <Fragment set:html={s.html} />
+          </section>
+        ))}
+
+        {checklist && (
+          <section id="checklist" class="checklist" aria-labelledby="checklist-h">
+            <h2 id="checklist-h">{checklistTitle}</h2>
+            <p>This list is published for transparency about work in progress. It is not part of the policy itself.</p>
+            {checklist.map((g) => (
+              <>
+                <h3>{g.area}</h3>
+                <ul>{g.items.map((i) => <li>{i}</li>)}</ul>
+              </>
+            ))}
+          </section>
+        )}
+
+        <p class="disclaimer">This policy describes the app’s data practices as implemented by the developer. It has not been reviewed by a lawyer, and publishing it does not by itself guarantee compliance with any platform’s requirements or any law.</p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .policy { padding-top: calc(var(--header-h) + clamp(3rem, 6vw, 6rem)); padding-bottom: var(--section); }
+  .crumbs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .crumbs a { color: var(--subtle); } .crumbs a:hover { color: var(--ivory); }
+  .crumbs [aria-current] { color: var(--ivory); }
+  .p-head h1 { font-size: clamp(2.6rem, 1.6rem + 4.4vw, 6rem); margin: 1rem 0 2.5rem; }
+  .p-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.25rem 2rem; border-top: 1px solid var(--line); padding-top: 1.5rem; margin: 0; }
+  .p-meta dd { margin: 0.35rem 0 0; color: var(--text); font-size: 0.95rem; word-break: break-word; }
+  .p-meta a { text-decoration: underline; text-decoration-color: var(--slate); text-underline-offset: 3px; }
+  .draft { margin-top: 2rem; max-width: 80ch; }
+  .p-summary { margin-top: 4rem; border: 1px solid var(--line); padding: clamp(1.25rem, 3vw, 2.5rem); }
+  .p-summary ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem 2rem; margin-top: 1.5rem; }
+  .p-summary li { display: grid; gap: 0.4rem; color: var(--text); }
+  .p-body { display: grid; grid-template-columns: 260px 1fr; gap: clamp(2rem, 5vw, 6rem); margin-top: 4rem; }
+  .p-body > * { min-width: 0; }
+  .toc { position: sticky; top: calc(var(--header-h) + 2rem); align-self: start; }
+  .toc ol { margin: 1rem 0 0; padding-left: 1.4rem; color: var(--subtle); font-size: var(--fs-small); display: grid; gap: 0.5rem; }
+  .toc a { color: var(--muted); } .toc a:hover { color: var(--ivory); }
+  .prose section:first-child h2 { margin-top: 0; }
+  .prose :global(.note) { margin: 1.2em 0; }
+  .checklist { margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .disclaimer { margin-top: 4rem; font-size: var(--fs-small); color: var(--subtle); border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  @media (max-width: 900px) { .p-body { grid-template-columns: 1fr; } .toc { position: static; } }
+</style>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 96">
+  <g transform="translate(8 16)">
+  <g stroke="#F1F0EC" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    <path d="M8 56 L31 8 L31 56"/><path d="M18.5 37 H31"/>
+    <path d="M31 8 H41 A11 11 0 0 1 41 30 H31"/><path d="M40 30 L56 56"/>
+  </g>
+  <circle cx="56" cy="8" r="2.6" fill="#8298B5"/></g>
+  <text x="96" y="50" font-family="Manrope, 'Segoe UI', Arial, Helvetica, sans-serif" font-size="30" font-weight="800" letter-spacing="7" fill="#F1F0EC">ARSALAN STUDIO</text>
+  <text x="97" y="76" font-family="Manrope, 'Segoe UI', Arial, Helvetica, sans-serif" font-size="12.5" font-weight="600" letter-spacing="4.4" fill="#A5A5A5">BY ARSALAN RIZWAN</text>
+</svg>

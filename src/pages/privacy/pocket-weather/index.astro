@@ -1,0 +1,28 @@
+---
+import Base from '../../../layouts/Base.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+---
+<Base title="Pocket Weather — Privacy" description="Privacy policies for each version of Pocket Weather: HUAWEI AppGallery and Apple iOS." image="/brand/og-pocket-weather.png">
+  <div class="container page">
+    <SectionHead as="h1" label="Pocket Weather · Privacy" title="Choose your" titleAccent="version." intro="The HUAWEI AppGallery and iOS versions use different advertising and purchase services, so each has its own policy." />
+    <div class="choices">
+      <a class="choice" href="/privacy/pocket-weather/huawei/" data-reveal>
+        <span class="status status--available">In effect</span>
+        <span class="c-title">HUAWEI AppGallery</span>
+        <span class="muted">HUAWEI Ads Kit, IAP Kit, Account Kit</span>
+      </a>
+      <a class="choice" href="/privacy/pocket-weather/ios/" data-reveal style="--delay:.08s">
+        <span class="status status--soon">Draft</span>
+        <span class="c-title">Apple iOS</span>
+        <span class="muted">Google AdMob, Apple In-App Purchase — no Huawei services</span>
+      </a>
+    </div>
+  </div>
+</Base>
+<style>
+  .page { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 8rem)); padding-bottom: var(--section); }
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .choice { display: grid; gap: 1rem; padding: 2rem; border: 1px solid var(--line); transition: border-color 0.4s var(--ease), background-color 0.4s var(--ease); }
+  .choice:hover { border-color: var(--line-strong); background: rgba(241, 240, 236, 0.03); }
+  .c-title { font-size: var(--fs-h3); }
+</style>

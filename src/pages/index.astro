@@ -1,0 +1,301 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import HeroVisual from '../components/HeroVisual.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site, contact } from '../data/site';
+import { featuredProjects, projects } from '../data/projects';
+import { capabilities, disciplines } from '../data/skills';
+import { experience } from '../data/experience';
+import { lab } from '../data/lab';
+import { testimonials, reviewSummary } from '../data/testimonials';
+import { pocketWeather as pw } from '../data/pocket-weather';
+
+const selected = featuredProjects.filter((p) => p.id !== 'pocket-weather').slice(0, 5);
+const [lead, ...rest] = selected;
+---
+<Base>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="label label--accent hero-kicker" data-reveal>Independent creative technologist</p>
+        <h1 class="hero-title">
+          <span class="split-line" data-reveal><span>Building digital</span></span>
+          <span class="split-line" data-reveal style="--delay:.08s"><span>experiences that</span></span>
+          <span class="split-line" data-reveal style="--delay:.16s"><span><span class="serif-i">bridge</span> imagination</span></span>
+          <span class="split-line" data-reveal style="--delay:.24s"><span>and technology.</span></span>
+        </h1>
+        <p class="lead hero-lead" data-reveal style="--delay:.3s">
+          I’m Arsalan Rizwan — a software developer and creative technologist exploring the intersection of software, immersive technology, interactive experiences, and emerging digital innovation.
+        </p>
+        <div class="hero-ctas" data-reveal style="--delay:.38s">
+          <a class="btn btn--primary" href="/work/">Explore my work <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="/contact/">Let’s connect</a>
+        </div>
+        {site.availability.show && <p class="avail status status--available">{site.availability.label}</p>}
+      </div>
+      <div class="hero-art" data-reveal style="--delay:.2s">
+        <HeroVisual />
+      </div>
+    </div>
+    <div class="container hero-foot">
+      <div class="brand-lockup" data-reveal>
+        <span class="bl-name">{site.brand}</span>
+        <span class="bl-by">{site.attribution}</span>
+      </div>
+      <p class="label bl-tag" data-reveal>{site.tagline}</p>
+      <a href="#selected" class="label scroll-cue" data-reveal>Scroll <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      {[...disciplines, ...disciplines].map((d) => <span>{d}<i>✦</i></span>)}
+    </div>
+  </div>
+
+  <!-- SELECTED WORK -->
+  <section class="section" id="selected">
+    <div class="container">
+      <SectionHead index="01" label="Selected work" title="Projects at the edge of" titleAccent="play and purpose." intro={`${projects.length} projects across immersive technology, games, software and research — from industrial VR training to accessible communication apps.`} />
+      <div class="sel-grid">
+        <div class="sel-lead"><ProjectCard project={lead} size="lg" /></div>
+        {rest.map((p, i) => <div class={`sel-item sel-item--${i}`}><ProjectCard project={p} /></div>)}
+      </div>
+      <div class="center"><a class="btn btn--ghost" href="/work/">View all {projects.length} projects <span class="arrow" aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
+
+  <!-- POCKET WEATHER -->
+  <section class="section pw-feature">
+    <div class="container pwf-grid">
+      <div class="pwf-copy">
+        <p class="label label--accent" data-reveal>02 — Featured product</p>
+        <h2 data-reveal>Pocket Weather</h2>
+        <p class="lead" data-reveal>{pw.positioning}</p>
+        <p class="muted" data-reveal>{pw.overview[0]}</p>
+        <ul class="pwf-platforms" data-reveal>
+          {pw.platforms.map((p) => (
+            <li>
+              <span>{p.store}</span>
+              <span class={`status ${p.status === 'available' ? 'status--available' : 'status--soon'}`}>{p.status === 'available' ? 'Available' : 'Coming soon'}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="hero-ctas" data-reveal>
+          <a class="btn btn--primary" href="/work/pocket-weather/">Read the case study <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link" href={pw.appGalleryUrl} target="_blank" rel="noopener">AppGallery ↗<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+      <div class="pwf-phones">
+        {[pw.gallery[0], pw.gallery[2], pw.gallery[6]].map((g, i) => (
+          <figure class={`pwf-phone pwf-phone--${i}`} data-reveal style={`--delay:${i * 0.08}s`}>
+            <Image src={g.src} alt={g.alt} widths={[260, 460]} sizes="(max-width: 900px) 33vw, 16vw" />
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERTISE -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="03" label="Areas of expertise" title="Craft across" titleAccent="disciplines." />
+      <ol class="exp-list">
+        {capabilities.map((c, i) => (
+          <li class="exp-row" data-reveal>
+            <span class="index-num">0{i + 1}</span>
+            <h3>{c.title}</h3>
+            <p class="muted">{c.intro}</p>
+            <a href={`/expertise/#${c.id}`} class="exp-arrow" aria-label={`More about ${c.title}`}>→</a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ABOUT PREVIEW -->
+  <section class="section about-prev">
+    <div class="container ap-grid">
+      <p class="label label--accent" data-reveal>04 — About</p>
+      <div>
+        <p class="ap-statement" data-reveal>
+          I build interactive digital experiences that combine <span class="serif-i">technology, creativity</span> and practical problem-solving — from Quest headsets in research labs to games in an app store.
+        </p>
+        <div class="ap-stats" data-reveal>
+          <div><span class="stat">2022</span><span class="label">At LUMS since</span></div>
+          <div><span class="stat">15+</span><span class="label">Immersive projects at LUMS</span></div>
+          <div><span class="stat">{reviewSummary.rating}</span><span class="label">Fiverr rating · {reviewSummary.count} reviews</span></div>
+        </div>
+        <a class="link" href="/about/">More about me →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="05" label="Experience" title="Where the work" titleAccent="happens." />
+      <ol class="timeline">
+        {experience.map((e) => (
+          <li class="tl-row" data-reveal>
+            <span class="tl-period label">{e.period}</span>
+            <div>
+              <h3>{e.org}{e.unit && <span class="muted"> — {e.unit}</span>}</h3>
+              <p class="tl-role">{e.role}</p>
+            </div>
+            <p class="muted tl-sum">{e.summary}</p>
+          </li>
+        ))}
+      </ol>
+      <a class="link" href="/about/#experience">Full timeline →</a>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="06" label="Client words" title="In their" titleAccent="own words." />
+      <div class="quotes">
+        {testimonials.slice(0, 2).map((t) => (
+          <figure class="quote" data-reveal>
+            <blockquote><p>“{t.quote}”</p></blockquote>
+            <figcaption><span>{t.who}</span><span class="label">{t.context}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="label src">Public reviews from <a href={reviewSummary.href} target="_blank" rel="noopener" class="u">Fiverr</a>. Reviewer names omitted for privacy.</p>
+    </div>
+  </section>
+
+  <!-- LAB -->
+  <section class="section">
+    <div class="container">
+      <SectionHead index="07" label="The Lab" title="Exploring ideas beyond" titleAccent="the conventional." />
+      <ul class="lab-grid">
+        {lab.slice(0, 6).map((l, i) => (
+          <li class="lab-item" data-reveal style={`--delay:${(i % 3) * 0.06}s`}>
+            <span class="label">{l.kind}</span>
+            <h3>{l.title}</h3>
+            <p class="muted">{l.summary}</p>
+          </li>
+        ))}
+      </ul>
+      <a class="link" href="/lab/">Enter the Lab →</a>
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="section cta">
+    <div class="container">
+      <p class="label label--accent" data-reveal>08 — Contact</p>
+      <h2 class="cta-title" data-reveal>Have an interesting idea?<br /><span class="serif-i">Let’s build something meaningful.</span></h2>
+      <div class="hero-ctas" data-reveal>
+        <a class="btn btn--primary" href={`mailto:${contact.email}`}>Email me <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="/contact/">All contact options</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-top: calc(var(--header-h) + 2rem); padding-bottom: 2rem; position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 2rem; align-items: center; flex: 1; }
+  .hero-kicker { margin-bottom: 2rem; }
+  .hero-title { font-size: clamp(2.5rem, 1.2rem + 5vw, 6.2rem); letter-spacing: -0.045em; line-height: 0.98; font-weight: 500; }
+  .hero-lead { margin: 2.2rem 0 2.6rem; max-width: 54ch; }
+  .hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+  .avail { margin-top: 2rem; }
+  .hero-art { position: relative; }
+  .hero-foot { display: grid; grid-template-columns: 1fr auto auto; gap: 2rem; align-items: end; padding-top: 2rem; border-top: 1px solid var(--line); margin-top: 2rem; }
+  .brand-lockup { display: grid; }
+  .bl-name { font-weight: 800; letter-spacing: 0.2em; font-size: 0.95rem; }
+  .bl-by { font-size: 0.68rem; letter-spacing: 0.26em; color: var(--subtle); font-weight: 600; }
+  .scroll-cue { color: var(--ivory); }
+
+  .marquee { border-block: 1px solid var(--line); overflow: hidden; padding: 1.4rem 0; }
+  .marquee-track { display: flex; width: max-content; gap: 0; }
+  .marquee span { font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); letter-spacing: -0.02em; white-space: nowrap; padding-right: 2.5rem; color: var(--muted); }
+  .marquee i { font-style: normal; color: var(--slate); padding-left: 2.5rem; font-size: 0.6em; vertical-align: middle; }
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee-track { animation: marquee 60s linear infinite; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+  }
+
+  .sel-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 2.5vw, 2.5rem); }
+  .sel-lead { grid-column: 1 / span 8; }
+  .sel-item--0 { grid-column: 9 / span 4; align-self: end; }
+  .sel-item--1 { grid-column: 2 / span 5; }
+  .sel-item--2 { grid-column: 8 / span 5; margin-top: 8rem; }
+  .sel-item--3 { grid-column: 1 / span 6; }
+  .center { display: flex; justify-content: center; margin-top: clamp(3rem, 6vw, 6rem); }
+
+  .pw-feature { background: linear-gradient(180deg, var(--graphite-2), var(--obsidian)); overflow: hidden; }
+  .pwf-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .pwf-copy h2 { font-size: var(--fs-h1); margin: 1.2rem 0 1.5rem; letter-spacing: -0.05em; }
+  .pwf-copy .lead { color: var(--ivory); }
+  .pwf-platforms { list-style: none; margin: 2rem 0 2.5rem; border-top: 1px solid var(--line); }
+  .pwf-platforms li { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .pwf-phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.75rem, 1.5vw, 1.5rem); align-items: start; }
+  .pwf-phone { margin: 0; border-radius: 22px; overflow: hidden; border: 1px solid var(--line-strong); box-shadow: 0 40px 80px -40px #000; }
+  .pwf-phone--1 { margin-top: 4rem; } .pwf-phone--2 { margin-top: 2rem; }
+
+  .exp-list { list-style: none; border-top: 1px solid var(--line); }
+  .exp-row { display: grid; grid-template-columns: 60px 1.1fr 1.4fr 48px; gap: 1.5rem; align-items: baseline; padding: clamp(1.5rem, 3vw, 2.4rem) 0; border-bottom: 1px solid var(--line); transition: background-color 0.4s; }
+  .exp-row h3 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.5rem); }
+  .exp-row p { margin: 0; }
+  .exp-arrow { font-size: 1.5rem; color: var(--slate); display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; transition: background-color 0.4s var(--ease), color 0.4s; }
+  .exp-arrow:hover { background: var(--ivory); color: var(--obsidian); }
+
+  .ap-grid { display: grid; grid-template-columns: 3fr 9fr; gap: 2rem; }
+  .ap-statement { font-size: clamp(1.7rem, 1.1rem + 2.2vw, 3.3rem); line-height: 1.15; letter-spacing: -0.03em; max-width: 24ch; }
+  .ap-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: clamp(2.5rem, 5vw, 4rem) 0; border-top: 1px solid var(--line); padding-top: 2rem; }
+  .ap-stats div { display: grid; gap: 0.5rem; }
+  .stat { font-size: clamp(2.2rem, 1.6rem + 2.4vw, 4rem); letter-spacing: -0.04em; font-weight: 500; }
+
+  .timeline { list-style: none; border-top: 1px solid var(--line); margin-bottom: 2.5rem; }
+  .tl-row { display: grid; grid-template-columns: 1fr 1.6fr 1.6fr; gap: 1.5rem 2.5rem; padding: 2rem 0; border-bottom: 1px solid var(--line); }
+  .tl-row h3 { font-size: 1.35rem; }
+  .tl-role { margin: 0.4rem 0 0; color: var(--slate); font-size: 0.95rem; }
+  .tl-sum { margin: 0; }
+
+  .quotes { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(2rem, 5vw, 5rem); }
+  .quote { margin: 0; border-top: 1px solid var(--line-strong); padding-top: 2rem; }
+  .quote blockquote { margin: 0; }
+  .quote p { font-family: var(--font-serif); font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem); line-height: 1.3; }
+  .quote figcaption { display: grid; gap: 0.3rem; margin-top: 1.5rem; }
+  .src { margin-top: 3rem; } .u { text-decoration: underline; }
+
+  .lab-grid { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); margin-bottom: 2.5rem; }
+  .lab-item { padding: clamp(1.5rem, 2.5vw, 2.25rem); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; gap: 0.75rem; align-content: start; transition: background-color 0.4s var(--ease); }
+  .lab-item:hover { background: rgba(241, 240, 236, 0.03); }
+  .lab-item h3 { font-size: 1.3rem; }
+  .lab-item p { margin: 0; font-size: 0.95rem; }
+
+  .cta { text-align: left; }
+  .cta-title { font-size: var(--fs-h1); margin: 1.5rem 0 3rem; letter-spacing: -0.045em; max-width: 16ch; }
+
+  @media (max-width: 1000px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { max-width: 520px; width: 100%; margin: 0 auto; order: -1; opacity: 0.9; }
+    .hero { min-height: auto; }
+    .sel-grid > * { grid-column: 1 / -1 !important; margin-top: 0 !important; }
+    .pwf-grid, .ap-grid, .quotes { grid-template-columns: 1fr; }
+    .tl-row { grid-template-columns: 1fr; gap: 0.6rem; }
+    .lab-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .hero-foot { grid-template-columns: 1fr; gap: 1rem; }
+    .scroll-cue { display: none; }
+    .exp-row { grid-template-columns: 1fr 48px; }
+    .exp-row .index-num { display: none; }
+    .exp-row p { grid-column: 1 / -1; grid-row: 2; }
+    .exp-row h3 { grid-column: 1; grid-row: 1; }
+    .exp-arrow { grid-column: 2; grid-row: 1; }
+    .ap-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+    .lab-grid { grid-template-columns: 1fr; }
+  }
+</style>
