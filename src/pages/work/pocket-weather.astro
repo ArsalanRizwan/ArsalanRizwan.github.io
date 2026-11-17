@@ -194,7 +194,7 @@ const more = pw.gallery.slice(7);
   <!-- E. INTEGRATIONS -->
   <section class="section">
     <div class="container">
-      <SectionHead index="E" label="Advertising & platform integrations" title="Platform-specific" titleAccent="by design." intro="The Huawei build keeps the Huawei services that ship today. The iOS build is planned around Google AdMob and Apple-native purchases, with every Huawei SDK removed." />
+      <SectionHead index="E" label="Advertising & platform integrations" title="Platform-specific" titleAccent="by design." intro="The Huawei build keeps the Huawei services that ship today. The iOS build uses non-personalised Google AdMob ads only, with no purchases and every Huawei SDK removed." />
       <div class="integrations">
         <div data-reveal>
           <h3 class="int-h">HUAWEI AppGallery build <span class="status status--available">Shipped</span></h3>
@@ -205,13 +205,13 @@ const more = pw.gallery.slice(7);
           </ul>
         </div>
         <div data-reveal style="--delay:.08s">
-          <h3 class="int-h">iOS build <span class="status status--soon">Planned</span></h3>
+          <h3 class="int-h">iOS build <span class="status status--soon">In development</span></h3>
           <ul class="int-list">
             {pw.integrations.ios.map((x) => (
               <li><span class="t-name">{x.name}</span><code>{x.pkg}</code><p class="muted">{x.use}</p></li>
             ))}
           </ul>
-          <p class="note">The iOS version has not been submitted to or approved by Apple. Its privacy policy is a <a href="/privacy/pocket-weather/ios/">published draft</a> with an open checklist.</p>
+          <p class="note">The iOS version has not been submitted to or approved by Apple. Its <a href="/privacy/pocket-weather/ios/">privacy policy</a> is published ahead of submission.</p>
         </div>
       </div>
     </div>

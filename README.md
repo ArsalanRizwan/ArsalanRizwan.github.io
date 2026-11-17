@@ -68,7 +68,7 @@ scripts/
 | `/privacy/` | Privacy documentation index |
 | `/privacy/pocket-weather/` | Version chooser |
 | `/privacy/pocket-weather/huawei/` | HUAWEI AppGallery policy (in effect) |
-| `/privacy/pocket-weather/ios/` | Apple iOS policy (draft) + submission checklist |
+| `/privacy/pocket-weather/ios/` | Apple iOS policy (published) |
 
 ## 3. Adding or editing a project
 
@@ -144,7 +144,7 @@ The platform cards, homepage badge, buttons and JSON-LD update automatically. Wh
 ## 6. Updating privacy policies
 
 - Huawei: `src/data/privacy/pocket-weather-huawei.ts`
-- iOS: `src/data/privacy/pocket-weather-ios.ts` (`status: 'draft'` shows the draft banner)
+- iOS: `src/data/privacy/pocket-weather-ios.ts` (set `status: 'draft'` to show a draft banner)
 
 Each policy has `effectiveDate`, `lastUpdated`, `summary` (the “At a glance” box) and `sections` (HTML strings).
 When data practices change, update the relevant section, bump `lastUpdated`, and keep the app’s store listing
@@ -155,19 +155,11 @@ pointing at the right URL:
 
 To add another app, create a new file in `src/data/privacy/`, a page in `src/pages/privacy/<app>/`, and list it in `src/pages/privacy/index.astro`.
 
-### Outstanding items before iOS submission
+### iOS configuration (confirmed 17 Nov 2026)
 
-Rendered on the iOS policy page from `iosChecklist`:
+The iOS policy describes: non-personalised Google AdMob ads only (no IDFA, no ATT prompt), Google UMP consent message for EEA/UK/Switzerland, no in-app purchases, no analytics or crash reporting, all ages (not Kids category), no Huawei SDKs, App Store publisher Abdur Rehman Arshad. If the build changes any of this, update `src/data/privacy/pocket-weather-ios.ts`.
 
-- Exclude `Assets/Plugins/Android` (HMS bridge) and `agconnect-services.json` from the iOS build; confirm no `com.huawei.*` code in the Xcode project.
-- Set a real iOS bundle identifier (currently the Unity template default).
-- Add the Google Mobile Ads Unity plugin, AdMob app ID and SKAdNetwork IDs.
-- Replace HUAWEI IAP with Apple In-App Purchase, including Restore Purchases; remove HUAWEI ID sign-in.
-- Decide personalised vs non-personalised ads → ATT prompt + `NSUserTrackingUsageDescription` only if the IDFA is used.
-- Google UMP consent for EEA/UK/Switzerland; privacy-options entry point in Settings.
-- `ageRestrictedTreatment` and max ad-content rating to match the age rating.
-- App Store Connect privacy details (include Google Mobile Ads SDK data), privacy manifest, age rating / Kids category decision.
-- Finalise the iOS policy (remove “to be confirmed” notes, set the effective date).
+`public/app-ads.txt` authorises the AdMob publisher `pub-2091686976047536`. The App Store listing's Marketing URL must be `https://arsalanrizwan.github.io/` for AdMob to find it.
 
 ### Review items for the Huawei build
 
